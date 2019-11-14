@@ -101,7 +101,7 @@ public class Facturacion implements Printable, ActionListener {
         fuente = new Font(fuente.getName(), Font.PLAIN, 12);
       }
       g.setFont(fuente);
-      g.drawString(lineasDeTexto[linea], 0, y);
+      g.drawString("    " + lineasDeTexto[linea], 0, y);
     }
 
     /* tell the caller that this page is part of the printed document */
