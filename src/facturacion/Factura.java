@@ -123,7 +123,7 @@ public class Factura {
 
   private String obtenerEncabezado() {
     String encabezado = "";
-    encabezado += String.format("%-53s%02d de %s de %04d\n", "TIENDAS GARCÍA", dia, meses[mes].substring(0, 3), anio);
+    encabezado += String.format("%-50s%02d de %s de %04d\n", "TIENDAS GARCÍA", dia, meses[mes].substring(0, 3), anio);
     encabezado += "Av. Principal #43, Nagua\n";
     encabezado += "809-333-2727\n";
     encabezado += obtenerSeparador(70);
