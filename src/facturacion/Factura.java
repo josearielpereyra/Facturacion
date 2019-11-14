@@ -84,7 +84,7 @@ public class Factura {
   }
   
   String obtenerFacturaParaPapelTamanioCarta() {
-    double lineasPorPagina = 31;
+    double lineasPorPagina = 27;
     int totalDePaginas = (int)Math.ceil(lineas.size() / lineasPorPagina );
     int paginaActual = 1;
     String factura = "";
@@ -125,7 +125,12 @@ public class Factura {
     String encabezado = "";
     encabezado += String.format("%-50s%02d de %s de %04d\n", "TIENDAS GARCÍA", dia, meses[mes].substring(0, 3), anio);
     encabezado += "Av. Principal #43, Nagua\n";
-    encabezado += "809-333-2727\n";
+    encabezado += "809-333-2727\n\n";
+    
+    encabezado += String.format("Cliente: %s %s\n", cliente.getNombre(), cliente.getApellido());
+    encabezado += String.format("Direccion: %s\nTelefono: %s Cedula: %s\n", 
+        cliente.getDireccion(), cliente.getTelefono(), cliente.getCedula());
+    
     encabezado += obtenerSeparador(70);
     encabezado += String.format("|%-10s|%-10s|%-20s|%-10s|%-10s|%-10s|\n",
       "Codigo", "Cant.", "Descripcion", "Precio", "Importe", "Descuento");
