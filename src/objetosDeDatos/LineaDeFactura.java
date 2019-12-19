@@ -1,9 +1,9 @@
-package facturacion;
+package objetosDeDatos;
 
 /**
  * @author josearielpereyra
  */
-class LineaDeFactura {
+public class LineaDeFactura {
   
   Producto producto;
   double cantidad;
