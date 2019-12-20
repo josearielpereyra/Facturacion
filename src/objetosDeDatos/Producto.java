@@ -1,4 +1,4 @@
-package facturacion;
+package objetosDeDatos;
 
 /**
  * @author josearielpereyra

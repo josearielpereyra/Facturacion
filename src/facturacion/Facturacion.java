@@ -2,6 +2,10 @@ package facturacion;
 /**
  * @author josearielpereyra
  */
+import objetosDeDatos.Factura;
+import objetosDeDatos.Producto;
+import objetosDeDatos.LineaDeFactura;
+import objetosDeDatos.Cliente;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -54,7 +58,7 @@ public class Facturacion implements Printable, ActionListener {
   public int print(Graphics g, PageFormat pf, int indiceDePagina)
     throws PrinterException {
 
-    Font fuente = new Font("Monospaced", Font.PLAIN, 12);
+    Font fuente = new Font("Monaco", Font.PLAIN, 14);
     FontMetrics metricasDeFuente = g.getFontMetrics(fuente);
     int alturaDeLinea = metricasDeFuente.getHeight();
     
@@ -118,6 +122,7 @@ public class Facturacion implements Printable, ActionListener {
       } catch (PrinterException ex) {
         /* El trabajo de impresion no se completó exitosamente */
         System.out.println("No se pudo imprimir");
+        ex.printStackTrace();
       }
     }
   }
@@ -132,9 +137,16 @@ public class Facturacion implements Printable, ActionListener {
     }
     JFrame ventana = new JFrame("Ejemplo de impresión con paginacion.");
     ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    JButton printButton = new JButton("Imprimir Paginas");
-    printButton.addActionListener(new Facturacion());
-    ventana.add(printButton, BorderLayout.CENTER);
+    ventana.setSize(800,600);
+    JMenuBar barraDeMenu = new JMenuBar();
+    JMenu menuArchivo = new JMenu("Archivo");
+    barraDeMenu.add(menuArchivo);
+    
+    JMenuItem menuItemImprimir = new JMenuItem("Imprimir");
+    menuItemImprimir.addActionListener(new Facturacion());
+    menuArchivo.add(menuItemImprimir);
+    ventana.setJMenuBar(barraDeMenu);
+    ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
     ventana.pack();
     ventana.setLocationRelativeTo(null);
     ventana.setVisible(true);

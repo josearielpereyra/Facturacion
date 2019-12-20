@@ -1,5 +1,7 @@
-package facturacion;
+package objetosDeDatos;
 
+import objetosDeDatos.LineaDeFactura;
+import objetosDeDatos.Cliente;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -83,8 +85,8 @@ public class Factura {
     return separador;
   }
   
-  String obtenerFacturaParaPapelTamanioCarta() {
-    double lineasPorPagina = 27;
+  public String obtenerFacturaParaPapelTamanioCarta() {
+    double lineasPorPagina = 31;
     int totalDePaginas = (int)Math.ceil(lineas.size() / lineasPorPagina );
     int paginaActual = 1;
     String factura = "";
