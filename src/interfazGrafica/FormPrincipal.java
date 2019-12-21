@@ -68,6 +68,11 @@ public class FormPrincipal extends javax.swing.JFrame {
         btnInventario.setFocusPainted(false);
         btnInventario.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnInventario.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnInventario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInventarioActionPerformed(evt);
+            }
+        });
 
         btnEntidades.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/entidad.png"))); // NOI18N
         btnEntidades.setText("CLIENTES / PROVEEDORES");
@@ -76,6 +81,11 @@ public class FormPrincipal extends javax.swing.JFrame {
         btnEntidades.setFocusPainted(false);
         btnEntidades.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnEntidades.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEntidades.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEntidadesActionPerformed(evt);
+            }
+        });
 
         btnParametro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/settings.png"))); // NOI18N
         btnParametro.setText("BASICOS");
@@ -159,6 +169,19 @@ public class FormPrincipal extends javax.swing.JFrame {
       fact.setLocationRelativeTo(this);
       fact.setVisible(true);
     }//GEN-LAST:event_btnFacturacionActionPerformed
+
+    private void btnInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventarioActionPerformed
+      FormMenuInventario mInve = new FormMenuInventario(null,true);
+      mInve.setLocationRelativeTo(this);
+      mInve.setVisible(true);
+      
+    }//GEN-LAST:event_btnInventarioActionPerformed
+
+    private void btnEntidadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntidadesActionPerformed
+     FormMenuEntidades mEnti = new FormMenuEntidades(null,true);
+      mEnti.setLocationRelativeTo(this);
+      mEnti.setVisible(true);
+    }//GEN-LAST:event_btnEntidadesActionPerformed
 
     /**
      * @param args the command line arguments
