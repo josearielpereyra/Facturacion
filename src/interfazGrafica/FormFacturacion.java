@@ -1,22 +1,62 @@
-
 package interfazGrafica;
 
+import facturacion.Facturacion;
+import java.awt.BorderLayout;
+import java.awt.Dialog;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Vector;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import objetosDeDatos.BaseDeDatos;
+import objetosDeDatos.Cliente;
+import objetosDeDatos.Factura;
+import objetosDeDatos.LineaDeFactura;
+import objetosDeDatos.Producto;
 
 /**
  *
  * @author codefutura
  */
-public class FormFacturacion extends javax.swing.JDialog { 
+public class FormFacturacion extends javax.swing.JDialog {
+
+    Factura factura;
+    Cliente clienteActual;
+    Calendar fechaActual = Calendar.getInstance();
+    ArrayList<LineaDeFactura> lineas;
+    Producto producto;
+    DefaultTableModel modelo;
+
     /**
      * Creates new form FormFacturacions
+     *
      * @param parent
      * @param modal
      */
     public FormFacturacion(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-  
-        
+        modelo = (DefaultTableModel) jTable1.getModel();
+        formatoTablaDetalle();
+        txtFecha.setText(String.valueOf(fechaActual.get(Calendar.DATE))
+                + "/" + String.valueOf(fechaActual.get(Calendar.MONTH)) + "/" + String.valueOf(fechaActual.get(Calendar.YEAR)));
+
     }
 
     @SuppressWarnings("unchecked")
@@ -39,6 +79,9 @@ public class FormFacturacion extends javax.swing.JDialog {
         txtImporteLinea = new javax.swing.JFormattedTextField();
         btnAgregaLinea = new javax.swing.JButton();
         btnSeleccionarProducto = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtComentario = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -54,27 +97,24 @@ public class FormFacturacion extends javax.swing.JDialog {
         jLabel8 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
-        btnModificar = new javax.swing.JButton();
         txtNumero = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
         txtNombreCliente = new javax.swing.JTextField();
         tFormaDePago = new javax.swing.JComboBox<>();
         btnBuscarCliente = new javax.swing.JButton();
-        btnModificar1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        btnImprimir = new javax.swing.JButton();
+        txtFecha = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("F A C T U R A C I O N");
 
+        jTable1.setForeground(new java.awt.Color(0, 51, 255));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
-                "Código", "Descripción", "Precio", "Cantidad", "Importe"
+                "Código", "Descripción", "Cantidad", "Precio", "Importe"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -85,17 +125,38 @@ public class FormFacturacion extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.setRowHeight(22);
         jScrollPane1.setViewportView(jTable1);
 
         jLabel9.setText("Código");
 
+        txtCodigo.setBackground(new java.awt.Color(255, 255, 204));
+        txtCodigo.setForeground(new java.awt.Color(0, 51, 255));
         txtCodigo.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        txtCodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCodigoActionPerformed(evt);
+            }
+        });
 
+        txtDescripcion.setEditable(false);
+        txtDescripcion.setForeground(new java.awt.Color(0, 51, 255));
         txtDescripcion.setHorizontalAlignment(javax.swing.JTextField.LEFT);
 
         jLabel10.setText("Descripción");
 
+        txtCantidad.setBackground(new java.awt.Color(204, 255, 204));
         txtCantidad.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtCantidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCantidadActionPerformed(evt);
+            }
+        });
+        txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCantidadKeyReleased(evt);
+            }
+        });
 
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel11.setText("Cantidad");
@@ -103,12 +164,18 @@ public class FormFacturacion extends javax.swing.JDialog {
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel12.setText("Precio");
 
+        txtPrecio.setEditable(false);
+        txtPrecio.setForeground(new java.awt.Color(0, 51, 255));
         txtPrecio.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel13.setText("Importe");
 
+        txtImporteLinea.setEditable(false);
+        txtImporteLinea.setBackground(new java.awt.Color(255, 255, 255));
+        txtImporteLinea.setForeground(new java.awt.Color(0, 51, 204));
         txtImporteLinea.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtImporteLinea.setOpaque(false);
 
         btnAgregaLinea.setText("+");
         btnAgregaLinea.addActionListener(new java.awt.event.ActionListener() {
@@ -129,16 +196,15 @@ public class FormFacturacion extends javax.swing.JDialog {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 808, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 819, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(2, 2, 2)
-                .addComponent(btnSeleccionarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSeleccionarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtDescripcion)
@@ -162,32 +228,52 @@ public class FormFacturacion extends javax.swing.JDialog {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel10))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCodigo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDescripcion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCantidad, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSeleccionarProducto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txtImporteLinea, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(btnAgregaLinea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel10)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSeleccionarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtImporteLinea, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnAgregaLinea))
                 .addContainerGap())
         );
 
         jTabbedPane1.addTab("Detalle", jPanel1);
+
+        txtComentario.setColumns(20);
+        txtComentario.setRows(5);
+        jScrollPane2.setViewportView(txtComentario);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 795, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Comentario", jPanel2);
 
         jLabel1.setText("Número");
 
@@ -200,16 +286,27 @@ public class FormFacturacion extends javax.swing.JDialog {
         jLabel4.setText("Fecha");
 
         txtImporte.setEditable(false);
+        txtImporte.setForeground(new java.awt.Color(0, 51, 255));
+        txtImporte.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
 
         jLabel5.setText("Importe");
+
+        txtDescuento.setEditable(false);
+        txtDescuento.setForeground(new java.awt.Color(0, 51, 255));
+        txtDescuento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
 
         jLabel6.setText("Descuento");
 
         txtImpuesto.setEditable(false);
+        txtImpuesto.setForeground(new java.awt.Color(0, 0, 255));
+        txtImpuesto.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
 
         jLabel7.setText("Impuesto");
 
         txtTotal.setEditable(false);
+        txtTotal.setForeground(new java.awt.Color(0, 51, 255));
+        txtTotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
+        txtTotal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
         jLabel8.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel8.setText("T o t a l");
@@ -223,19 +320,36 @@ public class FormFacturacion extends javax.swing.JDialog {
             }
         });
 
-        btnModificar.setText("Modificar");
-
         btnBuscar.setText("Buscar");
 
+        txtNombreCliente.setEditable(false);
+        txtNombreCliente.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        txtNombreCliente.setForeground(new java.awt.Color(0, 51, 255));
+
+        tFormaDePago.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        tFormaDePago.setForeground(new java.awt.Color(0, 51, 204));
         tFormaDePago.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Efectivo", "Crédito", "Tarjeta de crédito", "Cheque" }));
 
-        btnBuscarCliente.setText("Buscar");
+        btnBuscarCliente.setText("Localizar");
+        btnBuscarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarClienteActionPerformed(evt);
+            }
+        });
 
-        btnModificar1.setText("Imprimir");
+        btnImprimir.setText("Imprimir");
+        btnImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImprimirActionPerformed(evt);
+            }
+        });
 
-        jTextField1.setEditable(false);
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField1.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        txtFecha.setEditable(false);
+        txtFecha.setBackground(new java.awt.Color(255, 255, 255));
+        txtFecha.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        txtFecha.setForeground(new java.awt.Color(0, 153, 51));
+        txtFecha.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtFecha.setOpaque(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -244,7 +358,6 @@ public class FormFacturacion extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -254,6 +367,7 @@ public class FormFacturacion extends javax.swing.JDialog {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSeparator1)
                             .addComponent(jTabbedPane1)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -268,8 +382,7 @@ public class FormFacturacion extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(31, 31, 31))
+                                .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
@@ -280,20 +393,18 @@ public class FormFacturacion extends javax.swing.JDialog {
                                         .addGap(0, 0, Short.MAX_VALUE)
                                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtDescuento, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(btnModificar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtDescuento, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtImpuesto, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtImpuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(2, 2, 2)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(btnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -311,12 +422,13 @@ public class FormFacturacion extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 4, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnBuscarCliente)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtNombreCliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnBuscarCliente)
+                        .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
@@ -337,8 +449,7 @@ public class FormFacturacion extends javax.swing.JDialog {
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar)
-                    .addComponent(btnModificar)
-                    .addComponent(btnModificar1)
+                    .addComponent(btnImprimir)
                     .addComponent(btnCancelar))
                 .addContainerGap())
         );
@@ -347,19 +458,76 @@ public class FormFacturacion extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-    
-        
+        factura = null;
+        factura = new Factura(fechaActual, clienteActual, tFormaDePago.getSelectedItem().toString(), txtComentario.getText(), 1000.00, lineas);
+        Facturacion fac = new Facturacion(factura);
+        fac.imprimir();
+
+
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnAgregaLineaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregaLineaActionPerformed
-      
-       
+        if (producto == null) {
+            return;
+        }
+
+        if (lineas == null) {
+            lineas = new ArrayList<>();
+        }
+        double cant = validarDouble(txtCantidad);
+        double precio = producto.getPrecio();
+
+        lineas.add(new LineaDeFactura(new Producto(producto.getDescripcion(), producto.getCodigo(),
+                producto.getPrecio(), producto.getCosto(), producto.getExistencia(), producto.getImpuesto()),
+                cant, cant * precio * 0.10));
+
+        agregarListaDetalle();
+
+        txtImporte.setValue(obtenerSubtotal());
+        txtImpuesto.setValue(obtenerTotalDeImpuestos());
+        txtTotal.setValue(obtenerTotal());
+        txtDescuento.setValue(obtenerDescuentos());
+
+        limpiarCamposDetalle();
+        producto = null;
+
+
     }//GEN-LAST:event_btnAgregaLineaActionPerformed
 
     private void btnSeleccionarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarProductoActionPerformed
-    
-     
+        localizarProducto();
     }//GEN-LAST:event_btnSeleccionarProductoActionPerformed
+
+    private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
+        factura = null;
+        factura = new Factura(fechaActual, clienteActual, tFormaDePago.getSelectedItem().toString(), txtComentario.getText(), 1000.00, lineas);
+        Facturacion fac = new Facturacion(factura);
+        fac.imprimir();
+    }//GEN-LAST:event_btnImprimirActionPerformed
+
+    private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
+        buscarCliente();
+        txtNombreCliente.setText(clienteActual.getNombre() + " " + clienteActual.getApellido());
+
+    }//GEN-LAST:event_btnBuscarClienteActionPerformed
+
+    private void txtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadActionPerformed
+
+
+    }//GEN-LAST:event_txtCantidadActionPerformed
+
+    private void txtCantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyReleased
+        double cant = validarDoubleTexto(txtCantidad);
+        txtImporteLinea.setValue(cant * producto.getPrecio());
+
+    }//GEN-LAST:event_txtCantidadKeyReleased
+
+    private void txtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoActionPerformed
+        if (!txtCodigo.getText().trim().equals("")) {
+            localizarProducto();
+           
+        }
+    }//GEN-LAST:event_txtCodigoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -397,8 +565,7 @@ public class FormFacturacion extends javax.swing.JDialog {
     private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JButton btnModificar;
-    private javax.swing.JButton btnModificar1;
+    private javax.swing.JButton btnImprimir;
     private javax.swing.JButton btnSeleccionarProducto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -414,16 +581,19 @@ public class FormFacturacion extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JComboBox<String> tFormaDePago;
     private javax.swing.JFormattedTextField txtCantidad;
     private javax.swing.JTextField txtCodigo;
+    private javax.swing.JTextArea txtComentario;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JFormattedTextField txtDescuento;
+    private javax.swing.JTextField txtFecha;
     private javax.swing.JFormattedTextField txtImporte;
     private javax.swing.JFormattedTextField txtImporteLinea;
     private javax.swing.JFormattedTextField txtImpuesto;
@@ -433,5 +603,207 @@ public class FormFacturacion extends javax.swing.JDialog {
     private javax.swing.JFormattedTextField txtTotal;
     // End of variables declaration//GEN-END:variables
 
+    private double validarDouble(JFormattedTextField f) {
+        double valor = 0;
+        try {
+            valor = Double.parseDouble(String.valueOf(f.getValue()));
+        } catch (NumberFormatException e) {
+        }
+
+        return valor;
+    }
+
+    private double validarDoubleTexto(JFormattedTextField f) {
+        double valor = 0;
+        try {
+            valor = Double.parseDouble(String.valueOf(f.getText()));
+        } catch (NumberFormatException e) {
+        }
+
+        return valor;
+    }
+
+    double obtenerSubtotal() {
+        double subTotal = 0.0;
+        for (LineaDeFactura linea : lineas) {
+            subTotal += linea.getImporte();
+        }
+        return subTotal;
+    }
+
+    double obtenerDescuentos() {
+        double descuento = 0.0;
+        for (LineaDeFactura linea : lineas) {
+            descuento += linea.getDescuento();
+        }
+        return descuento;
+    }
+
+    double obtenerTotalDeImpuestos() {
+        double totalDeImpuestos = 0.0;
+        for (LineaDeFactura linea : lineas) {
+            totalDeImpuestos += (linea.getImporte() - linea.getDescuento()) * (linea.getProducto().getImpuesto() / 100);
+        }
+        return totalDeImpuestos;
+    }
+
+    double obtenerTotal() {
+        return obtenerSubtotal() - obtenerDescuentos() + obtenerTotalDeImpuestos();
+    }
+
+    private void limpiarCamposDetalle() {
+        txtDescripcion.setText("");
+        txtCantidad.setValue(1);
+        txtPrecio.setValue(0.00);
+        txtImporteLinea.setValue(0.00);
+        txtCodigo.setText("");
+        txtCodigo.requestFocus();
+    }
+
+    private void borrarJTabla(JTable tabla) {
+        DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+        int fichas = tabla.getRowCount();
+        try {
+            for (int i = 0; fichas > i; i++) {
+                modelo.removeRow(0);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "ERROR al borrar tabla detalle");
+        }
+    }
+
+    private void agregarListaDetalle() {
+        borrarJTabla(jTable1);
+        for (int i = 0; i < lineas.size(); i++) {
+            LineaDeFactura linea = lineas.get(i);
+            modelo.addRow(
+                    new Object[]{
+                        linea.getProducto().getCodigo(),
+                        linea.getProducto().getDescripcion(),
+                        linea.getCantidad(),
+                        String.format("%,.2f", linea.getProducto().getPrecio()),
+                        String.format("%,.2f", linea.getImporte())
+                    });
+        }
+    }
+
+    private void formatoTablaDetalle() {
+        TableColumnModel columnModel = jTable1.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(8);
+        columnModel.getColumn(1).setPreferredWidth(210);
+        columnModel.getColumn(2).setPreferredWidth(12);
+        columnModel.getColumn(3).setPreferredWidth(12);
+        columnModel.getColumn(4).setPreferredWidth(12);
+        jTable1.setColumnModel(columnModel);
+        modelo = (DefaultTableModel) jTable1.getModel();
+        //evita que muevan las columnas
+        jTable1.getTableHeader().setReorderingAllowed(false);
+    }
+
+    private void buscarCliente() {
+        try {
+            JTable tablaClientes = new JTable();
+
+            Connection conexion = BaseDeDatos.conectar();
+            String sql = "SELECT cedula, nombre, apellido, direccion, telefono, limiteCredito "
+                    + "FROM tblcliente";
+
+            Statement sentenciaDeConsulta = conexion.createStatement();
+            ResultSet conjuntoDeResultados = sentenciaDeConsulta.executeQuery(sql);
+
+            Vector<String> encabezados = new Vector<>();
+            Vector< Vector<String>> datos = new Vector<>();
+
+            ResultSetMetaData metaDatos = conjuntoDeResultados.getMetaData();
+            int totalDeColumnas = metaDatos.getColumnCount();
+            for (int i = 1; i <= totalDeColumnas; i++) {
+                encabezados.add(metaDatos.getColumnName(i).toUpperCase().replace("_", " "));
+            }
+
+            while (conjuntoDeResultados.next()) {
+                Vector<String> registroActual = new Vector<>();
+                for (int i = 1; i <= totalDeColumnas; i++) {
+                    registroActual.add(conjuntoDeResultados.getObject(i).toString());
+                }
+                datos.add(registroActual);
+            }
+
+            DefaultTableModel modeloTabla = new DefaultTableModel(datos, encabezados) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+            tablaClientes.setModel(modeloTabla);
+
+            tablaClientes.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+                @Override
+                public void valueChanged(ListSelectionEvent e) {
+                    clienteActual = null;
+                    clienteActual = new Cliente();
+                    clienteActual.setCedula(tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 0).toString());
+                    clienteActual.setNombre(tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 1).toString());
+                    clienteActual.setApellido(tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 2).toString());
+                    clienteActual.setDireccion(tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 3).toString());
+                    clienteActual.setTelefono(tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 4).toString());
+                    clienteActual.setLimiteDeCredito(Double.parseDouble(String.valueOf(tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 5))));
+                }
+            });
+
+            JDialog ventanaDeBusqueda = new JDialog(this);
+            ventanaDeBusqueda.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+            ventanaDeBusqueda.add(new JScrollPane(tablaClientes));
+            JButton botonAceptar = new JButton("Aceptar");
+            botonAceptar.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ventanaDeBusqueda.dispose();
+                }
+            });
+            ventanaDeBusqueda.add(botonAceptar, BorderLayout.SOUTH);
+
+            ventanaDeBusqueda.pack();
+            ventanaDeBusqueda.setLocationRelativeTo(this);
+            ventanaDeBusqueda.setVisible(true);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex);
+        }
+    }
+
+    private void localizarProducto() {
+        if (clienteActual == null) {
+            JOptionPane.showMessageDialog(this, "Seleccione un cliente para continuar");
+            return;
+        }
+
+        if (txtCodigo.getText().trim().length() > 0) {
+            try {
+                Connection conexion = BaseDeDatos.conectar();
+                String sql = "SELECT codigo, descripcion, costo, existencia, precio, impuesto "
+                        + "FROM tblproducto "
+                        + " WHERE codigo = ?";
+                PreparedStatement sentenciaDeBusqueda = conexion.prepareStatement(sql);
+                sentenciaDeBusqueda.setString(1, txtCodigo.getText().trim());
+                ResultSet conjuntoDeResultados = sentenciaDeBusqueda.executeQuery();
+                if (conjuntoDeResultados.next()) {
+                    producto = new Producto(conjuntoDeResultados.getString("descripcion"), conjuntoDeResultados.getString("codigo"),
+                            conjuntoDeResultados.getDouble("precio"), conjuntoDeResultados.getDouble("costo"),
+                            conjuntoDeResultados.getDouble("existencia"), conjuntoDeResultados.getDouble("impuesto"));
+
+                    txtDescripcion.setText(producto.getDescripcion());
+                    txtCantidad.setValue(1);
+                    txtPrecio.setValue(producto.getPrecio());
+                    txtImporteLinea.setValue(producto.getPrecio());
+
+                }
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error con la base de datos \n Error: " + ex.getErrorCode());
+            }
+
+        }
+        
+         txtCantidad.requestFocus();
+    }
 
 }
