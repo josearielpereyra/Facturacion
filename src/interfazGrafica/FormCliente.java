@@ -215,7 +215,8 @@ public class FormCliente extends javax.swing.JFrame {
               txtDireccion.getText().trim(),
               txtTelefono.getText().trim(),
               txtCedula.getText().trim(),
-              Double.parseDouble(txtLimiteDeCredito.getText())
+              Double.parseDouble(txtLimiteDeCredito.getText()),
+              0
       );
 
       if (clienteActual.guardar() == true) {
@@ -420,7 +421,8 @@ public class FormCliente extends javax.swing.JFrame {
                 txtDireccion.getText().trim(),
                 txtTelefono.getText().trim(),
                 txtCedula.getText().trim(),
-                Double.parseDouble(txtLimiteDeCredito.getText())
+                Double.parseDouble(txtLimiteDeCredito.getText()),
+                0
         );
 
         if (clienteActual.modificar() == true) {

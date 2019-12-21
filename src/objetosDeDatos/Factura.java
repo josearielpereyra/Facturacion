@@ -1,7 +1,16 @@
 package objetosDeDatos;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  * @author josearielpereyra
@@ -13,6 +22,8 @@ public class Factura {
     String tipo;
     String comentario;
     double totalPagado;
+    long idFactura;
+    int tipof;
 
     ArrayList<LineaDeFactura> lineas;
     private final int dia;
@@ -27,7 +38,7 @@ public class Factura {
             String tipo,
             String comentario,
             double totalPagado,
-            ArrayList<LineaDeFactura> lineas) {
+            ArrayList<LineaDeFactura> lineas,int tipof) {
         this.fecha = fecha;
         this.cliente = cliente;
         this.tipo = tipo;
@@ -38,6 +49,7 @@ public class Factura {
         dia = fecha.get(Calendar.DATE);
         mes = fecha.get(Calendar.MONTH);
         anio = fecha.get(Calendar.YEAR);
+        this.tipof=tipof;
 
     }
 
@@ -127,6 +139,8 @@ public class Factura {
         encabezado += "Av. Principal #43, Nagua\n";
         encabezado += "809-333-2727\n\n";
 
+        encabezado += "F A C T U R A  # 0000" + this.idFactura + "\n\n";
+    
         encabezado += String.format("Cliente: %s %s\n", cliente.getNombre(), cliente.getApellido());
         encabezado += String.format("Direccion: %s\nTelefono: %s Cedula: %s\n",
                 cliente.getDireccion(), cliente.getTelefono(), cliente.getCedula());
@@ -169,6 +183,58 @@ public class Factura {
 
         factura += String.format("\nGracias por utilizar nuestros servicios!\n");
         return factura;
+    }
+
+    public int guardarFactura() {
+        int insertado = 0;
+        try {
+            Connection conexion = BaseDeDatos.conectar();
+            String sql = "INSERT INTO tblfactura (idcliente,fecha,subtotal,descuento,impuesto,total,montopagado,pago)  VALUES ( ?, ?, ?, ?, ?, ?,?,?)";
+            PreparedStatement sentenciaDeInsercion = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            sentenciaDeInsercion.setInt(1, cliente.getIdCliente());
+            sentenciaDeInsercion.setDate(2, new java.sql.Date(new Date().getTime()));
+            sentenciaDeInsercion.setDouble(3, obtenerSubtotal());
+            sentenciaDeInsercion.setDouble(4, obtenerDescuentos());
+            sentenciaDeInsercion.setDouble(5, obtenerTotalDeImpuestos());
+            sentenciaDeInsercion.setDouble(6, obtenerTotal());
+            sentenciaDeInsercion.setDouble(7, this.totalPagado);
+            sentenciaDeInsercion.setInt(8, 0);
+
+            insertado = sentenciaDeInsercion.executeUpdate();
+
+            ResultSet rs;
+            rs = sentenciaDeInsercion.getGeneratedKeys();
+            if (rs.next()) {
+                this.idFactura = rs.getLong(1);
+            }
+            //registro de los detalles de facturas
+            guardarDetalleFactura(this.idFactura);
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocurrio un error al intentar guardar los datos");
+        }
+        return insertado;
+
+    }
+
+    private void guardarDetalleFactura(long facturaid) {
+        for (int i = 0; i < lineas.size(); i++) {
+            try {
+                LineaDeFactura linea = lineas.get(i);
+                Connection conexion = BaseDeDatos.conectar();
+                String sql = "INSERT INTO tblDetalleFactura (idVenta,idproducto,cantidad,tasaImpuesto,precio,subtotal)  VALUES ( ?, ?, ?, ?, ?, ?)";
+                PreparedStatement sentenciaDeInsercion = conexion.prepareStatement(sql);
+                sentenciaDeInsercion.setLong(1, facturaid);
+                sentenciaDeInsercion.setInt(2, linea.getProducto().getIdProducto());
+                sentenciaDeInsercion.setDouble(3, linea.getCantidad());
+                sentenciaDeInsercion.setDouble(4, linea.getProducto().getImpuesto());
+                sentenciaDeInsercion.setDouble(5, linea.getProducto().getPrecio());
+                sentenciaDeInsercion.setDouble(6, linea.importe);
+                sentenciaDeInsercion.executeUpdate();
+            } catch (SQLException ex) {
+                Logger.getLogger(Factura.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
 }

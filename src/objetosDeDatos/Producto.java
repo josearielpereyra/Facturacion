@@ -11,14 +11,16 @@ public class Producto {
     double costo;
     double existencia;
     double impuesto;
+    int idProducto;
 
-    public Producto(String descripcion, String codigo, double precio, double costo, double existencia, double impuesto) {
+    public Producto(String descripcion, String codigo, double precio, double costo, double existencia, double impuesto,int idProducto) {
         this.descripcion = descripcion;
         this.codigo = codigo;
         this.precio = precio;
         this.costo = costo;
         this.existencia = existencia;
         this.impuesto = impuesto;
+        this.idProducto=idProducto;
     }
 
     public String getDescripcion() {
@@ -68,5 +70,15 @@ public class Producto {
     public void setImpuesto(double impuesto) {
         this.impuesto = impuesto;
     }
+
+    public int getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
+    }
+    
+    
 
 }

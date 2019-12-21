@@ -35,7 +35,7 @@ import objetosDeDatos.Producto;
  * @author codefutura
  */
 public class FormFacturacion extends javax.swing.JDialog {
-
+    
     Factura factura;
     Cliente clienteActual;
     Calendar fechaActual = Calendar.getInstance();
@@ -56,9 +56,9 @@ public class FormFacturacion extends javax.swing.JDialog {
         formatoTablaDetalle();
         txtFecha.setText(String.valueOf(fechaActual.get(Calendar.DATE))
                 + "/" + String.valueOf(fechaActual.get(Calendar.MONTH)) + "/" + String.valueOf(fechaActual.get(Calendar.YEAR)));
-
+        
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -104,6 +104,8 @@ public class FormFacturacion extends javax.swing.JDialog {
         btnBuscarCliente = new javax.swing.JButton();
         btnImprimir = new javax.swing.JButton();
         txtFecha = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        txtMontoPagado = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("F A C T U R A C I O N");
@@ -228,7 +230,7 @@ public class FormFacturacion extends javax.swing.JDialog {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -243,10 +245,10 @@ public class FormFacturacion extends javax.swing.JDialog {
                     .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSeleccionarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtImporteLinea, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnAgregaLinea))
+                        .addComponent(btnAgregaLinea)
+                        .addComponent(txtImporteLinea, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -269,7 +271,7 @@ public class FormFacturacion extends javax.swing.JDialog {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -351,6 +353,13 @@ public class FormFacturacion extends javax.swing.JDialog {
         txtFecha.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtFecha.setOpaque(false);
 
+        jLabel14.setText("Monto pagado");
+
+        txtMontoPagado.setBackground(new java.awt.Color(255, 255, 255));
+        txtMontoPagado.setForeground(new java.awt.Color(0, 51, 204));
+        txtMontoPagado.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
+        txtMontoPagado.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -378,11 +387,18 @@ public class FormFacturacion extends javax.swing.JDialog {
                                     .addComponent(txtNombreCliente)
                                     .addComponent(tFormaDePago, 0, 236, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnBuscarCliente)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnBuscarCliente)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(jLabel14)))
+                                .addGap(10, 10, 10)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtFecha, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+                                    .addComponent(txtMontoPagado)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
@@ -432,9 +448,12 @@ public class FormFacturacion extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
-                    .addComponent(tFormaDePago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(tFormaDePago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel14)
+                        .addComponent(txtMontoPagado, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -459,10 +478,17 @@ public class FormFacturacion extends javax.swing.JDialog {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         factura = null;
-        factura = new Factura(fechaActual, clienteActual, tFormaDePago.getSelectedItem().toString(), txtComentario.getText(), 1000.00, lineas);
+        factura = new Factura(fechaActual, clienteActual, tFormaDePago.getSelectedItem().toString(), txtComentario.getText(), validarDouble(txtMontoPagado), lineas, tFormaDePago.getSelectedIndex());
+        
+        if (factura.guardarFactura() > 0) {
+            JOptionPane.showMessageDialog(this, "Factura registrada exitosamente");
+        }
+        
         Facturacion fac = new Facturacion(factura);
         fac.imprimir();
-
+        
+        limpiarFormulario();
+        
 
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -470,27 +496,27 @@ public class FormFacturacion extends javax.swing.JDialog {
         if (producto == null) {
             return;
         }
-
+        
         if (lineas == null) {
             lineas = new ArrayList<>();
         }
         double cant = validarDouble(txtCantidad);
         double precio = producto.getPrecio();
-
+        
         lineas.add(new LineaDeFactura(new Producto(producto.getDescripcion(), producto.getCodigo(),
-                producto.getPrecio(), producto.getCosto(), producto.getExistencia(), producto.getImpuesto()),
+                producto.getPrecio(), producto.getCosto(), producto.getExistencia(), producto.getImpuesto(), producto.getIdProducto()),
                 cant, cant * precio * 0.10));
-
+        
         agregarListaDetalle();
-
+        
         txtImporte.setValue(obtenerSubtotal());
         txtImpuesto.setValue(obtenerTotalDeImpuestos());
         txtTotal.setValue(obtenerTotal());
         txtDescuento.setValue(obtenerDescuentos());
-
+        
         limpiarCamposDetalle();
         producto = null;
-
+        
 
     }//GEN-LAST:event_btnAgregaLineaActionPerformed
 
@@ -500,7 +526,7 @@ public class FormFacturacion extends javax.swing.JDialog {
 
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
         factura = null;
-        factura = new Factura(fechaActual, clienteActual, tFormaDePago.getSelectedItem().toString(), txtComentario.getText(), 1000.00, lineas);
+        factura = new Factura(fechaActual, clienteActual, tFormaDePago.getSelectedItem().toString(), txtComentario.getText(), validarDouble(txtMontoPagado), lineas, tFormaDePago.getSelectedIndex());
         Facturacion fac = new Facturacion(factura);
         fac.imprimir();
     }//GEN-LAST:event_btnImprimirActionPerformed
@@ -512,7 +538,7 @@ public class FormFacturacion extends javax.swing.JDialog {
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
 
     private void txtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadActionPerformed
-
+        
 
     }//GEN-LAST:event_txtCantidadActionPerformed
 
@@ -525,7 +551,7 @@ public class FormFacturacion extends javax.swing.JDialog {
     private void txtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoActionPerformed
         if (!txtCodigo.getText().trim().equals("")) {
             localizarProducto();
-           
+            
         }
     }//GEN-LAST:event_txtCodigoActionPerformed
 
@@ -572,6 +598,7 @@ public class FormFacturacion extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -597,6 +624,7 @@ public class FormFacturacion extends javax.swing.JDialog {
     private javax.swing.JFormattedTextField txtImporte;
     private javax.swing.JFormattedTextField txtImporteLinea;
     private javax.swing.JFormattedTextField txtImpuesto;
+    private javax.swing.JFormattedTextField txtMontoPagado;
     private javax.swing.JTextField txtNombreCliente;
     private javax.swing.JTextField txtNumero;
     private javax.swing.JFormattedTextField txtPrecio;
@@ -609,20 +637,20 @@ public class FormFacturacion extends javax.swing.JDialog {
             valor = Double.parseDouble(String.valueOf(f.getValue()));
         } catch (NumberFormatException e) {
         }
-
+        
         return valor;
     }
-
+    
     private double validarDoubleTexto(JFormattedTextField f) {
         double valor = 0;
         try {
             valor = Double.parseDouble(String.valueOf(f.getText()));
         } catch (NumberFormatException e) {
         }
-
+        
         return valor;
     }
-
+    
     double obtenerSubtotal() {
         double subTotal = 0.0;
         for (LineaDeFactura linea : lineas) {
@@ -630,7 +658,7 @@ public class FormFacturacion extends javax.swing.JDialog {
         }
         return subTotal;
     }
-
+    
     double obtenerDescuentos() {
         double descuento = 0.0;
         for (LineaDeFactura linea : lineas) {
@@ -638,7 +666,7 @@ public class FormFacturacion extends javax.swing.JDialog {
         }
         return descuento;
     }
-
+    
     double obtenerTotalDeImpuestos() {
         double totalDeImpuestos = 0.0;
         for (LineaDeFactura linea : lineas) {
@@ -646,11 +674,11 @@ public class FormFacturacion extends javax.swing.JDialog {
         }
         return totalDeImpuestos;
     }
-
+    
     double obtenerTotal() {
         return obtenerSubtotal() - obtenerDescuentos() + obtenerTotalDeImpuestos();
     }
-
+    
     private void limpiarCamposDetalle() {
         txtDescripcion.setText("");
         txtCantidad.setValue(1);
@@ -659,7 +687,7 @@ public class FormFacturacion extends javax.swing.JDialog {
         txtCodigo.setText("");
         txtCodigo.requestFocus();
     }
-
+    
     private void borrarJTabla(JTable tabla) {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
         int fichas = tabla.getRowCount();
@@ -671,7 +699,7 @@ public class FormFacturacion extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "ERROR al borrar tabla detalle");
         }
     }
-
+    
     private void agregarListaDetalle() {
         borrarJTabla(jTable1);
         for (int i = 0; i < lineas.size(); i++) {
@@ -686,7 +714,7 @@ public class FormFacturacion extends javax.swing.JDialog {
                     });
         }
     }
-
+    
     private void formatoTablaDetalle() {
         TableColumnModel columnModel = jTable1.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(8);
@@ -699,27 +727,27 @@ public class FormFacturacion extends javax.swing.JDialog {
         //evita que muevan las columnas
         jTable1.getTableHeader().setReorderingAllowed(false);
     }
-
+    
     private void buscarCliente() {
         try {
             JTable tablaClientes = new JTable();
-
+            
             Connection conexion = BaseDeDatos.conectar();
-            String sql = "SELECT cedula, nombre, apellido, direccion, telefono, limiteCredito "
+            String sql = "SELECT cedula, nombre, apellido, direccion, telefono, limiteCredito,idcliente "
                     + "FROM tblcliente";
-
+            
             Statement sentenciaDeConsulta = conexion.createStatement();
             ResultSet conjuntoDeResultados = sentenciaDeConsulta.executeQuery(sql);
-
+            
             Vector<String> encabezados = new Vector<>();
             Vector< Vector<String>> datos = new Vector<>();
-
+            
             ResultSetMetaData metaDatos = conjuntoDeResultados.getMetaData();
             int totalDeColumnas = metaDatos.getColumnCount();
             for (int i = 1; i <= totalDeColumnas; i++) {
                 encabezados.add(metaDatos.getColumnName(i).toUpperCase().replace("_", " "));
             }
-
+            
             while (conjuntoDeResultados.next()) {
                 Vector<String> registroActual = new Vector<>();
                 for (int i = 1; i <= totalDeColumnas; i++) {
@@ -727,7 +755,7 @@ public class FormFacturacion extends javax.swing.JDialog {
                 }
                 datos.add(registroActual);
             }
-
+            
             DefaultTableModel modeloTabla = new DefaultTableModel(datos, encabezados) {
                 @Override
                 public boolean isCellEditable(int row, int column) {
@@ -735,7 +763,7 @@ public class FormFacturacion extends javax.swing.JDialog {
                 }
             };
             tablaClientes.setModel(modeloTabla);
-
+            
             tablaClientes.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
                 @Override
                 public void valueChanged(ListSelectionEvent e) {
@@ -747,9 +775,10 @@ public class FormFacturacion extends javax.swing.JDialog {
                     clienteActual.setDireccion(tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 3).toString());
                     clienteActual.setTelefono(tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 4).toString());
                     clienteActual.setLimiteDeCredito(Double.parseDouble(String.valueOf(tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 5))));
+                    clienteActual.setIdCliente(Integer.parseInt(String.valueOf(tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 6))));
                 }
             });
-
+            
             JDialog ventanaDeBusqueda = new JDialog(this);
             ventanaDeBusqueda.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
             ventanaDeBusqueda.add(new JScrollPane(tablaClientes));
@@ -761,7 +790,7 @@ public class FormFacturacion extends javax.swing.JDialog {
                 }
             });
             ventanaDeBusqueda.add(botonAceptar, BorderLayout.SOUTH);
-
+            
             ventanaDeBusqueda.pack();
             ventanaDeBusqueda.setLocationRelativeTo(this);
             ventanaDeBusqueda.setVisible(true);
@@ -769,17 +798,17 @@ public class FormFacturacion extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, ex);
         }
     }
-
+    
     private void localizarProducto() {
         if (clienteActual == null) {
             JOptionPane.showMessageDialog(this, "Seleccione un cliente para continuar");
             return;
         }
-
+        
         if (txtCodigo.getText().trim().length() > 0) {
             try {
                 Connection conexion = BaseDeDatos.conectar();
-                String sql = "SELECT codigo, descripcion, costo, existencia, precio, impuesto "
+                String sql = "SELECT codigo, descripcion, costo, existencia, precio, impuesto,idproducto "
                         + "FROM tblproducto "
                         + " WHERE codigo = ?";
                 PreparedStatement sentenciaDeBusqueda = conexion.prepareStatement(sql);
@@ -788,22 +817,44 @@ public class FormFacturacion extends javax.swing.JDialog {
                 if (conjuntoDeResultados.next()) {
                     producto = new Producto(conjuntoDeResultados.getString("descripcion"), conjuntoDeResultados.getString("codigo"),
                             conjuntoDeResultados.getDouble("precio"), conjuntoDeResultados.getDouble("costo"),
-                            conjuntoDeResultados.getDouble("existencia"), conjuntoDeResultados.getDouble("impuesto"));
-
+                            conjuntoDeResultados.getDouble("existencia"), conjuntoDeResultados.getDouble("impuesto"), conjuntoDeResultados.getInt("idproducto"));
+                    
                     txtDescripcion.setText(producto.getDescripcion());
                     txtCantidad.setValue(1);
                     txtPrecio.setValue(producto.getPrecio());
                     txtImporteLinea.setValue(producto.getPrecio());
-
+                    
+                    txtCantidad.requestFocus();
                 }
-
+                
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error con la base de datos \n Error: " + ex.getErrorCode());
             }
-
+            
         }
         
-         txtCantidad.requestFocus();
     }
-
+    
+    private void limpiarFormulario() {
+        txtCantidad.setValue(0.00);
+        txtImporte.setValue(0.00);
+        txtImporteLinea.setValue(0.00);
+        txtImpuesto.setValue(0.00);
+        txtTotal.setValue(0.00);
+        txtDescuento.setValue(0.00);
+        txtNombreCliente.setText("");
+        txtMontoPagado.setValue(0.00);
+        txtPrecio.setValue(0.00);
+        txtComentario.setText("");
+        txtDescripcion.setText("");
+        
+        clienteActual = null;
+        producto = null;
+        lineas = null;
+        factura = null;
+        
+        borrarJTabla(jTable1);
+        
+    }
+    
 }

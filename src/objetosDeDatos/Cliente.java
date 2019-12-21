@@ -18,14 +18,16 @@ public class Cliente {
   String telefono;
   String cedula;
   double limiteDeCredito;
+  int idCliente;
 
-  public Cliente(String nombre, String apellido, String direccion, String telefono, String cedula, double limiteDeCredito) {
+  public Cliente(String nombre, String apellido, String direccion, String telefono, String cedula, double limiteDeCredito,int idCliente) {
     this.nombre = nombre;
     this.apellido = apellido;
     this.direccion = direccion;
     this.telefono = telefono;
     this.cedula = cedula;
     this.limiteDeCredito = limiteDeCredito;
+    this.idCliente=idCliente;
   }
   public Cliente(){
     
@@ -123,6 +125,14 @@ public class Cliente {
 
     public void setLimiteDeCredito(double limiteDeCredito) {
         this.limiteDeCredito = limiteDeCredito;
+    }
+
+    public int getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
     }
   
   
