@@ -237,4 +237,9 @@ public class Factura {
         }
     }
 
+    public void setIdFactura(long idFactura) {
+        this.idFactura = idFactura;
+    }
+    
+
 }

@@ -35,7 +35,7 @@ import objetosDeDatos.Producto;
  * @author codefutura
  */
 public class FormFacturacion extends javax.swing.JDialog {
-    
+
     Factura factura;
     Cliente clienteActual;
     Calendar fechaActual = Calendar.getInstance();
@@ -56,9 +56,9 @@ public class FormFacturacion extends javax.swing.JDialog {
         formatoTablaDetalle();
         txtFecha.setText(String.valueOf(fechaActual.get(Calendar.DATE))
                 + "/" + String.valueOf(fechaActual.get(Calendar.MONTH)) + "/" + String.valueOf(fechaActual.get(Calendar.YEAR)));
-        
+
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -98,7 +98,7 @@ public class FormFacturacion extends javax.swing.JDialog {
         btnCancelar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         txtNumero = new javax.swing.JTextField();
-        btnBuscar = new javax.swing.JButton();
+        btnBuscarFactura = new javax.swing.JButton();
         txtNombreCliente = new javax.swing.JTextField();
         tFormaDePago = new javax.swing.JComboBox<>();
         btnBuscarCliente = new javax.swing.JButton();
@@ -198,7 +198,7 @@ public class FormFacturacion extends javax.swing.JDialog {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 819, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 835, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -230,7 +230,7 @@ public class FormFacturacion extends javax.swing.JDialog {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -264,14 +264,14 @@ public class FormFacturacion extends javax.swing.JDialog {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 795, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 811, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -291,7 +291,7 @@ public class FormFacturacion extends javax.swing.JDialog {
         txtImporte.setForeground(new java.awt.Color(0, 51, 255));
         txtImporte.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
 
-        jLabel5.setText("Importe");
+        jLabel5.setText("SubTotal");
 
         txtDescuento.setEditable(false);
         txtDescuento.setForeground(new java.awt.Color(0, 51, 255));
@@ -313,8 +313,15 @@ public class FormFacturacion extends javax.swing.JDialog {
         jLabel8.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel8.setText("T o t a l");
 
-        btnCancelar.setText("Cancelar");
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/housekeeping.png"))); // NOI18N
+        btnCancelar.setText("Limpiar / habilitar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/save.png"))); // NOI18N
         btnGuardar.setText("Guardar");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -322,7 +329,18 @@ public class FormFacturacion extends javax.swing.JDialog {
             }
         });
 
-        btnBuscar.setText("Buscar");
+        txtNumero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNumeroActionPerformed(evt);
+            }
+        });
+
+        btnBuscarFactura.setText("Buscar");
+        btnBuscarFactura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarFacturaActionPerformed(evt);
+            }
+        });
 
         txtNombreCliente.setEditable(false);
         txtNombreCliente.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
@@ -339,6 +357,7 @@ public class FormFacturacion extends javax.swing.JDialog {
             }
         });
 
+        btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ledger.png"))); // NOI18N
         btnImprimir.setText("Imprimir");
         btnImprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -355,7 +374,6 @@ public class FormFacturacion extends javax.swing.JDialog {
 
         jLabel14.setText("Monto pagado");
 
-        txtMontoPagado.setBackground(new java.awt.Color(255, 255, 255));
         txtMontoPagado.setForeground(new java.awt.Color(0, 51, 204));
         txtMontoPagado.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.00"))));
         txtMontoPagado.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -372,7 +390,7 @@ public class FormFacturacion extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnBuscar)
+                        .addComponent(btnBuscarFactura)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -405,26 +423,25 @@ public class FormFacturacion extends javax.swing.JDialog {
                                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(6, 6, 6)
                                         .addComponent(txtImporte))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtDescuento, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel7)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(txtImpuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(2, 2, 2)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE))))
+                                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(2, 2, 2)
+                                        .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(btnImprimir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -433,7 +450,7 @@ public class FormFacturacion extends javax.swing.JDialog {
                 .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscar)
+                    .addComponent(btnBuscarFactura)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 4, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -453,7 +470,7 @@ public class FormFacturacion extends javax.swing.JDialog {
                         .addComponent(jLabel14)
                         .addComponent(txtMontoPagado, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -465,7 +482,7 @@ public class FormFacturacion extends javax.swing.JDialog {
                         .addComponent(txtImporte, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(txtDescuento, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(39, 39, 39)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar)
                     .addComponent(btnImprimir)
@@ -477,18 +494,28 @@ public class FormFacturacion extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        if (clienteActual == null) {
+            JOptionPane.showMessageDialog(this, "Favor seleccionar un cliente");
+            return;
+        }
+
+        if (validarDouble(txtMontoPagado) == 0) {
+            JOptionPane.showMessageDialog(this, "Favor indicar el pago");
+            txtMontoPagado.requestFocus();
+            return;
+        }
+
         factura = null;
         factura = new Factura(fechaActual, clienteActual, tFormaDePago.getSelectedItem().toString(), txtComentario.getText(), validarDouble(txtMontoPagado), lineas, tFormaDePago.getSelectedIndex());
-        
+
         if (factura.guardarFactura() > 0) {
             JOptionPane.showMessageDialog(this, "Factura registrada exitosamente");
         }
-        
+
         Facturacion fac = new Facturacion(factura);
         fac.imprimir();
-        
+
         limpiarFormulario();
-        
 
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -496,27 +523,27 @@ public class FormFacturacion extends javax.swing.JDialog {
         if (producto == null) {
             return;
         }
-        
+
         if (lineas == null) {
             lineas = new ArrayList<>();
         }
         double cant = validarDouble(txtCantidad);
         double precio = producto.getPrecio();
-        
+
         lineas.add(new LineaDeFactura(new Producto(producto.getDescripcion(), producto.getCodigo(),
                 producto.getPrecio(), producto.getCosto(), producto.getExistencia(), producto.getImpuesto(), producto.getIdProducto()),
                 cant, cant * precio * 0.10));
-        
+
         agregarListaDetalle();
-        
+
         txtImporte.setValue(obtenerSubtotal());
         txtImpuesto.setValue(obtenerTotalDeImpuestos());
         txtTotal.setValue(obtenerTotal());
         txtDescuento.setValue(obtenerDescuentos());
-        
+
         limpiarCamposDetalle();
         producto = null;
-        
+
 
     }//GEN-LAST:event_btnAgregaLineaActionPerformed
 
@@ -525,8 +552,19 @@ public class FormFacturacion extends javax.swing.JDialog {
     }//GEN-LAST:event_btnSeleccionarProductoActionPerformed
 
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
+        if (clienteActual == null) {
+            JOptionPane.showMessageDialog(this, "Favor seleccionar un cliente");
+            return;
+        }
+
+
         factura = null;
         factura = new Factura(fechaActual, clienteActual, tFormaDePago.getSelectedItem().toString(), txtComentario.getText(), validarDouble(txtMontoPagado), lineas, tFormaDePago.getSelectedIndex());
+
+        if (!txtNumero.getText().trim().equals("")) {
+            factura.setIdFactura(Long.parseLong(String.valueOf(txtNumero.getText().trim())));
+        }
+
         Facturacion fac = new Facturacion(factura);
         fac.imprimir();
     }//GEN-LAST:event_btnImprimirActionPerformed
@@ -534,11 +572,12 @@ public class FormFacturacion extends javax.swing.JDialog {
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
         buscarCliente();
         txtNombreCliente.setText(clienteActual.getNombre() + " " + clienteActual.getApellido());
+       
 
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
 
     private void txtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadActionPerformed
-        
+
 
     }//GEN-LAST:event_txtCantidadActionPerformed
 
@@ -551,9 +590,29 @@ public class FormFacturacion extends javax.swing.JDialog {
     private void txtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoActionPerformed
         if (!txtCodigo.getText().trim().equals("")) {
             localizarProducto();
-            
+
         }
     }//GEN-LAST:event_txtCodigoActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+  limpiarFormulario();
+  activarControles();
+  txtNumero.setText("");
+  
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnBuscarFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarFacturaActionPerformed
+        limpiarFormulario();
+        localizarFactura();
+       desactivarControlesEnBusqueda();
+    }//GEN-LAST:event_btnBuscarFacturaActionPerformed
+
+    private void txtNumeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumeroActionPerformed
+        limpiarFormulario();
+        localizarFactura();
+        
+      desactivarControlesEnBusqueda();
+    }//GEN-LAST:event_txtNumeroActionPerformed
 
     /**
      * @param args the command line arguments
@@ -587,8 +646,8 @@ public class FormFacturacion extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregaLinea;
-    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarCliente;
+    private javax.swing.JButton btnBuscarFactura;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnImprimir;
@@ -637,20 +696,20 @@ public class FormFacturacion extends javax.swing.JDialog {
             valor = Double.parseDouble(String.valueOf(f.getValue()));
         } catch (NumberFormatException e) {
         }
-        
+
         return valor;
     }
-    
+
     private double validarDoubleTexto(JFormattedTextField f) {
         double valor = 0;
         try {
             valor = Double.parseDouble(String.valueOf(f.getText()));
         } catch (NumberFormatException e) {
         }
-        
+
         return valor;
     }
-    
+
     double obtenerSubtotal() {
         double subTotal = 0.0;
         for (LineaDeFactura linea : lineas) {
@@ -658,7 +717,7 @@ public class FormFacturacion extends javax.swing.JDialog {
         }
         return subTotal;
     }
-    
+
     double obtenerDescuentos() {
         double descuento = 0.0;
         for (LineaDeFactura linea : lineas) {
@@ -666,7 +725,7 @@ public class FormFacturacion extends javax.swing.JDialog {
         }
         return descuento;
     }
-    
+
     double obtenerTotalDeImpuestos() {
         double totalDeImpuestos = 0.0;
         for (LineaDeFactura linea : lineas) {
@@ -674,11 +733,11 @@ public class FormFacturacion extends javax.swing.JDialog {
         }
         return totalDeImpuestos;
     }
-    
+
     double obtenerTotal() {
         return obtenerSubtotal() - obtenerDescuentos() + obtenerTotalDeImpuestos();
     }
-    
+
     private void limpiarCamposDetalle() {
         txtDescripcion.setText("");
         txtCantidad.setValue(1);
@@ -687,7 +746,7 @@ public class FormFacturacion extends javax.swing.JDialog {
         txtCodigo.setText("");
         txtCodigo.requestFocus();
     }
-    
+
     private void borrarJTabla(JTable tabla) {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
         int fichas = tabla.getRowCount();
@@ -699,7 +758,7 @@ public class FormFacturacion extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "ERROR al borrar tabla detalle");
         }
     }
-    
+
     private void agregarListaDetalle() {
         borrarJTabla(jTable1);
         for (int i = 0; i < lineas.size(); i++) {
@@ -714,7 +773,7 @@ public class FormFacturacion extends javax.swing.JDialog {
                     });
         }
     }
-    
+
     private void formatoTablaDetalle() {
         TableColumnModel columnModel = jTable1.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(8);
@@ -727,27 +786,27 @@ public class FormFacturacion extends javax.swing.JDialog {
         //evita que muevan las columnas
         jTable1.getTableHeader().setReorderingAllowed(false);
     }
-    
+
     private void buscarCliente() {
         try {
             JTable tablaClientes = new JTable();
-            
+
             Connection conexion = BaseDeDatos.conectar();
             String sql = "SELECT cedula, nombre, apellido, direccion, telefono, limiteCredito,idcliente "
                     + "FROM tblcliente";
-            
+
             Statement sentenciaDeConsulta = conexion.createStatement();
             ResultSet conjuntoDeResultados = sentenciaDeConsulta.executeQuery(sql);
-            
+
             Vector<String> encabezados = new Vector<>();
             Vector< Vector<String>> datos = new Vector<>();
-            
+
             ResultSetMetaData metaDatos = conjuntoDeResultados.getMetaData();
             int totalDeColumnas = metaDatos.getColumnCount();
             for (int i = 1; i <= totalDeColumnas; i++) {
                 encabezados.add(metaDatos.getColumnName(i).toUpperCase().replace("_", " "));
             }
-            
+
             while (conjuntoDeResultados.next()) {
                 Vector<String> registroActual = new Vector<>();
                 for (int i = 1; i <= totalDeColumnas; i++) {
@@ -755,7 +814,7 @@ public class FormFacturacion extends javax.swing.JDialog {
                 }
                 datos.add(registroActual);
             }
-            
+
             DefaultTableModel modeloTabla = new DefaultTableModel(datos, encabezados) {
                 @Override
                 public boolean isCellEditable(int row, int column) {
@@ -763,7 +822,7 @@ public class FormFacturacion extends javax.swing.JDialog {
                 }
             };
             tablaClientes.setModel(modeloTabla);
-            
+
             tablaClientes.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
                 @Override
                 public void valueChanged(ListSelectionEvent e) {
@@ -778,7 +837,7 @@ public class FormFacturacion extends javax.swing.JDialog {
                     clienteActual.setIdCliente(Integer.parseInt(String.valueOf(tablaClientes.getValueAt(tablaClientes.getSelectedRow(), 6))));
                 }
             });
-            
+
             JDialog ventanaDeBusqueda = new JDialog(this);
             ventanaDeBusqueda.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
             ventanaDeBusqueda.add(new JScrollPane(tablaClientes));
@@ -790,7 +849,7 @@ public class FormFacturacion extends javax.swing.JDialog {
                 }
             });
             ventanaDeBusqueda.add(botonAceptar, BorderLayout.SOUTH);
-            
+
             ventanaDeBusqueda.pack();
             ventanaDeBusqueda.setLocationRelativeTo(this);
             ventanaDeBusqueda.setVisible(true);
@@ -798,13 +857,13 @@ public class FormFacturacion extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, ex);
         }
     }
-    
+
     private void localizarProducto() {
         if (clienteActual == null) {
             JOptionPane.showMessageDialog(this, "Seleccione un cliente para continuar");
             return;
         }
-        
+
         if (txtCodigo.getText().trim().length() > 0) {
             try {
                 Connection conexion = BaseDeDatos.conectar();
@@ -818,23 +877,23 @@ public class FormFacturacion extends javax.swing.JDialog {
                     producto = new Producto(conjuntoDeResultados.getString("descripcion"), conjuntoDeResultados.getString("codigo"),
                             conjuntoDeResultados.getDouble("precio"), conjuntoDeResultados.getDouble("costo"),
                             conjuntoDeResultados.getDouble("existencia"), conjuntoDeResultados.getDouble("impuesto"), conjuntoDeResultados.getInt("idproducto"));
-                    
+
                     txtDescripcion.setText(producto.getDescripcion());
                     txtCantidad.setValue(1);
                     txtPrecio.setValue(producto.getPrecio());
                     txtImporteLinea.setValue(producto.getPrecio());
-                    
+
                     txtCantidad.requestFocus();
                 }
-                
+
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error con la base de datos \n Error: " + ex.getErrorCode());
             }
-            
+
         }
-        
+
     }
-    
+
     private void limpiarFormulario() {
         txtCantidad.setValue(0.00);
         txtImporte.setValue(0.00);
@@ -847,14 +906,82 @@ public class FormFacturacion extends javax.swing.JDialog {
         txtPrecio.setValue(0.00);
         txtComentario.setText("");
         txtDescripcion.setText("");
-        
+
         clienteActual = null;
         producto = null;
         lineas = null;
         factura = null;
-        
+
         borrarJTabla(jTable1);
-        
+
+    }
+
+    private void localizarFactura() {
+        if (txtNumero.getText().trim().length() > 0) {
+            try {
+                Connection conexion = BaseDeDatos.conectar();
+                String sql = "SELECT d.idventa, d.idproducto, d.cantidad,d.precio,d.subtotal,d.descuentos,f.fecha,"
+                        + "f.montopagado,c.Nombre,c.Apellido,c.Cedula,c.LimiteCredito,c.telefono,c.Direccion,c.idcliente,"
+                        + "p.descripcion,p.codigo,p.costo,p.existencia,p.impuesto "
+                        + "FROM tbldetalleFactura d "
+                        + " JOIN tblfactura f ON f.idfactura=d.idventa "
+                        + " JOIN tblcliente c ON c.idcliente=f.idcliente "
+                        + " JOIN tblproducto p ON p.idproducto=d.idproducto"
+                        + " WHERE idventa = ?";
+                PreparedStatement sentenciaDeBusqueda = conexion.prepareStatement(sql);
+                sentenciaDeBusqueda.setString(1, txtNumero.getText().trim());
+                ResultSet rs = sentenciaDeBusqueda.executeQuery();
+
+                clienteActual = null;
+                lineas = null;
+
+                if (rs.next()) {
+                    if (lineas == null) {
+                        lineas = new ArrayList<>();
+                    }
+
+                    lineas.add(new LineaDeFactura(new Producto(rs.getString("descripcion"), rs.getString("codigo"),
+                            rs.getDouble("precio"), rs.getDouble("costo"), rs.getDouble("existencia"),
+                            rs.getDouble("impuesto"), rs.getInt("idproducto")),
+                            rs.getDouble("cantidad"), rs.getDouble("descuentos")));
+                    if (clienteActual == null) {
+                        clienteActual = new Cliente(rs.getString("nombre"), rs.getString("apellido"),
+                                rs.getString("direccion"), rs.getString("telefono"), rs.getString("cedula"), rs.getDouble("limitecredito"), rs.getInt("idcliente"));
+
+                        txtNombreCliente.setText(clienteActual.getNombre() + " " + clienteActual.getApellido());
+                    }
+
+                }
+
+                agregarListaDetalle();
+                txtImporte.setValue(obtenerSubtotal());
+                txtImpuesto.setValue(obtenerTotalDeImpuestos());
+                txtTotal.setValue(obtenerTotal());
+                txtDescuento.setValue(obtenerDescuentos());
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error con la base de datos \n Error: " + ex.getErrorCode());
+            }
+
+        }
+
     }
     
+    
+   private void desactivarControlesEnBusqueda(){
+        btnGuardar.setEnabled(false);
+        txtCodigo.setEnabled(false);
+        btnAgregaLinea.setEnabled(false);
+        txtCantidad.setEnabled(false);
+        btnSeleccionarProducto.setEnabled(false);
+   }
+
+   
+   private void activarControles(){
+        btnGuardar.setEnabled(true);
+        txtCodigo.setEnabled(true);
+        btnAgregaLinea.setEnabled(true);
+        txtCantidad.setEnabled(true);
+         btnSeleccionarProducto.setEnabled(true);
+   }
 }
