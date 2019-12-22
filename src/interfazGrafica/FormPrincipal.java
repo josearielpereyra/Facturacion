@@ -175,6 +175,8 @@ public class FormPrincipal extends javax.swing.JFrame {
       mInve.setLocationRelativeTo(this);
       mInve.setVisible(true);
       
+      
+      
     }//GEN-LAST:event_btnInventarioActionPerformed
 
     private void btnEntidadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntidadesActionPerformed

@@ -16,7 +16,7 @@ public class BaseDeDatos {
     private static String password = "";
 
     public static Connection conectar() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://" + host + ":3306/" + bd, usuario, password);
+        return DriverManager.getConnection("jdbc:mysql://" + host + ":3308/" + bd, usuario, password);
     }
 
 }
