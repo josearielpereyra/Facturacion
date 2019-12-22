@@ -47,6 +47,11 @@ public class FormMenuInventario extends javax.swing.JDialog {
         btnProductos1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/truck.png"))); // NOI18N
         btnProductos1.setText("Entradas y Salidas");
         btnProductos1.setToolTipText("");
+        btnProductos1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProductos1ActionPerformed(evt);
+            }
+        });
 
         btnSalir.setText("S A L I R");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -99,6 +104,12 @@ public class FormMenuInventario extends javax.swing.JDialog {
 
       
     }//GEN-LAST:event_btnProductosActionPerformed
+
+    private void btnProductos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductos1ActionPerformed
+      FormEntradaSalida entra = new FormEntradaSalida(this, true);
+      entra.setLocationRelativeTo(this);
+      entra.setVisible(true);
+    }//GEN-LAST:event_btnProductos1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

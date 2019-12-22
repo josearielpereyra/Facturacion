@@ -13,10 +13,10 @@ public class BaseDeDatos {
     private static String host = "localhost";
     private static String bd = "dbfacturas";
     private static String usuario = "root";
-    private static String password = "1286";
+    private static String password = "";
 
     public static Connection conectar() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://" + host + ":3308/" + bd, usuario, password);
+        return DriverManager.getConnection("jdbc:mysql://" + host + ":3306/" + bd, usuario, password);
     }
 
 }
