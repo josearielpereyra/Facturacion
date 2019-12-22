@@ -40,6 +40,11 @@ public class FormMenuEntidades extends javax.swing.JDialog {
         btnProductos1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/collaborator_female.png"))); // NOI18N
         btnProductos1.setText("Proveedores");
         btnProductos1.setToolTipText("");
+        btnProductos1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProductos1ActionPerformed(evt);
+            }
+        });
 
         btnSalir.setText("S A L I R");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -80,6 +85,12 @@ public class FormMenuEntidades extends javax.swing.JDialog {
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnProductos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductos1ActionPerformed
+       FormProveedor p = new FormProveedor(this,true);
+       p.setLocationRelativeTo(null);
+       p.setVisible(true);
+    }//GEN-LAST:event_btnProductos1ActionPerformed
 
     /**
      * @param args the command line arguments
