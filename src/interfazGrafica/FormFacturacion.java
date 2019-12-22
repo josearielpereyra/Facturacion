@@ -499,10 +499,26 @@ public class FormFacturacion extends javax.swing.JDialog {
             return;
         }
 
-        if (validarDouble(txtMontoPagado) == 0) {
-            JOptionPane.showMessageDialog(this, "Favor indicar el pago");
-            txtMontoPagado.requestFocus();
-            return;
+        if (tFormaDePago.getSelectedIndex() == 1) {
+            if (validarDouble(txtTotal) > clienteActual.getLimiteDeCredito()) {
+                JOptionPane.showMessageDialog(this, "Esta factura excede el límite de crédito para este cliente !");
+                return;
+            }
+        }
+
+        if (tFormaDePago.getSelectedIndex() == 0) {
+            if (validarDouble(txtMontoPagado) == 0) {
+                JOptionPane.showMessageDialog(this, "Favor indicar el pago");
+                txtMontoPagado.requestFocus();
+                return;
+            }
+
+            if ((validarDouble(txtMontoPagado) < validarDouble(txtTotal)) | (validarDouble(txtMontoPagado) > validarDouble(txtTotal))) {
+                JOptionPane.showMessageDialog(this, "El monto pagado debe ser igual al total facturado");
+                txtMontoPagado.requestFocus();
+                return;
+            }
+
         }
 
         factura = null;
@@ -521,6 +537,12 @@ public class FormFacturacion extends javax.swing.JDialog {
 
     private void btnAgregaLineaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregaLineaActionPerformed
         if (producto == null) {
+            return;
+        }
+
+        if (producto.getExistencia() < validarDoubleTexto(txtCantidad)) {
+            JOptionPane.showMessageDialog(this, "No hay existencia disponible para la cantidad");
+            //considerando que es necesario recorrer toda la lista para ver cuanta unidades estan servidas de este producto.
             return;
         }
 
@@ -557,7 +579,6 @@ public class FormFacturacion extends javax.swing.JDialog {
             return;
         }
 
-
         factura = null;
         factura = new Factura(fechaActual, clienteActual, tFormaDePago.getSelectedItem().toString(), txtComentario.getText(), validarDouble(txtMontoPagado), lineas, tFormaDePago.getSelectedIndex());
 
@@ -572,7 +593,7 @@ public class FormFacturacion extends javax.swing.JDialog {
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
         buscarCliente();
         txtNombreCliente.setText(clienteActual.getNombre() + " " + clienteActual.getApellido());
-       
+
 
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
 
@@ -595,23 +616,23 @@ public class FormFacturacion extends javax.swing.JDialog {
     }//GEN-LAST:event_txtCodigoActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-  limpiarFormulario();
-  activarControles();
-  txtNumero.setText("");
-  
+        limpiarFormulario();
+        activarControles();
+        txtNumero.setText("");
+
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnBuscarFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarFacturaActionPerformed
         limpiarFormulario();
         localizarFactura();
-       desactivarControlesEnBusqueda();
+        desactivarControlesEnBusqueda();
     }//GEN-LAST:event_btnBuscarFacturaActionPerformed
 
     private void txtNumeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumeroActionPerformed
         limpiarFormulario();
         localizarFactura();
-        
-      desactivarControlesEnBusqueda();
+
+        desactivarControlesEnBusqueda();
     }//GEN-LAST:event_txtNumeroActionPerformed
 
     /**
@@ -927,33 +948,44 @@ public class FormFacturacion extends javax.swing.JDialog {
                         + " JOIN tblfactura f ON f.idfactura=d.idventa "
                         + " JOIN tblcliente c ON c.idcliente=f.idcliente "
                         + " JOIN tblproducto p ON p.idproducto=d.idproducto"
-                        + " WHERE idventa = ?";
+                        + " WHERE d.idventa = ?";
                 PreparedStatement sentenciaDeBusqueda = conexion.prepareStatement(sql);
                 sentenciaDeBusqueda.setString(1, txtNumero.getText().trim());
                 ResultSet rs = sentenciaDeBusqueda.executeQuery();
 
                 clienteActual = null;
-                lineas = null;
-
-                if (rs.next()) {
+               //Leer la primera del resultset 
+                if (rs.first() == true) {
                     if (lineas == null) {
                         lineas = new ArrayList<>();
                     }
-
                     lineas.add(new LineaDeFactura(new Producto(rs.getString("descripcion"), rs.getString("codigo"),
                             rs.getDouble("precio"), rs.getDouble("costo"), rs.getDouble("existencia"),
                             rs.getDouble("impuesto"), rs.getInt("idproducto")),
                             rs.getDouble("cantidad"), rs.getDouble("descuentos")));
+
                     if (clienteActual == null) {
                         clienteActual = new Cliente(rs.getString("nombre"), rs.getString("apellido"),
                                 rs.getString("direccion"), rs.getString("telefono"), rs.getString("cedula"), rs.getDouble("limitecredito"), rs.getInt("idcliente"));
 
                         txtNombreCliente.setText(clienteActual.getNombre() + " " + clienteActual.getApellido());
+                        txtMontoPagado.setValue(rs.getDouble("montopagado"));
                     }
 
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se encontraron registros en esta búsqueda");
+                    return;
+                }
+
+                while (rs.next()) {
+                    lineas.add(new LineaDeFactura(new Producto(rs.getString("descripcion"), rs.getString("codigo"),
+                            rs.getDouble("precio"), rs.getDouble("costo"), rs.getDouble("existencia"),
+                            rs.getDouble("impuesto"), rs.getInt("idproducto")),
+                            rs.getDouble("cantidad"), rs.getDouble("descuentos")));
                 }
 
                 agregarListaDetalle();
+
                 txtImporte.setValue(obtenerSubtotal());
                 txtImpuesto.setValue(obtenerTotalDeImpuestos());
                 txtTotal.setValue(obtenerTotal());
@@ -966,22 +998,20 @@ public class FormFacturacion extends javax.swing.JDialog {
         }
 
     }
-    
-    
-   private void desactivarControlesEnBusqueda(){
+
+    private void desactivarControlesEnBusqueda() {
         btnGuardar.setEnabled(false);
         txtCodigo.setEnabled(false);
         btnAgregaLinea.setEnabled(false);
         txtCantidad.setEnabled(false);
         btnSeleccionarProducto.setEnabled(false);
-   }
+    }
 
-   
-   private void activarControles(){
+    private void activarControles() {
         btnGuardar.setEnabled(true);
         txtCodigo.setEnabled(true);
         btnAgregaLinea.setEnabled(true);
         txtCantidad.setEnabled(true);
-         btnSeleccionarProducto.setEnabled(true);
-   }
+        btnSeleccionarProducto.setEnabled(true);
+    }
 }
