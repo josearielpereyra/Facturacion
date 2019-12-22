@@ -46,13 +46,14 @@ CREATE TABLE IF NOT EXISTS `tblcliente` (
   `Direccion` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`idcliente`),
   KEY `Cedula` (`Cedula`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
--- Volcando datos para la tabla dbfacturas.tblcliente: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla dbfacturas.tblcliente: ~1 rows (aproximadamente)
 DELETE FROM `tblcliente`;
 /*!40000 ALTER TABLE `tblcliente` DISABLE KEYS */;
 INSERT INTO `tblcliente` (`idcliente`, `Nombre`, `Apellido`, `Cedula`, `LimiteCredito`, `telefono`, `Direccion`) VALUES
-	(1, 'Juan ', 'Perez', '0814-1444-1', 5000.00, '809-485-4574', 'C/ Luperon Nro. 85, Nagua, R.D');
+	(1, 'Juan ', 'Perez', '0814-1444-1', 5000.00, '809-485-4574', 'C/ Luperon Nro. 85, Nagua, R.D'),
+	(2, 'Luis', 'Lopez', '0111', 15000.00, '809-441-4552', 'calle');
 /*!40000 ALTER TABLE `tblcliente` ENABLE KEYS */;
 
 -- Volcando estructura para tabla dbfacturas.tblcobros
@@ -108,11 +109,16 @@ CREATE TABLE IF NOT EXISTS `tblDetalleFactura` (
   CONSTRAINT `FK_tblproductoscompras_tblventas` FOREIGN KEY (`idVenta`) REFERENCES `tblfactura` (`idfactura`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
--- Volcando datos para la tabla dbfacturas.tblDetalleFactura: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla dbfacturas.tblDetalleFactura: ~6 rows (aproximadamente)
 DELETE FROM `tblDetalleFactura`;
 /*!40000 ALTER TABLE `tblDetalleFactura` DISABLE KEYS */;
 INSERT INTO `tblDetalleFactura` (`idVenta`, `idProducto`, `Cantidad`, `TasaImpuesto`, `Precio`, `SubTotal`, `Descuentos`) VALUES
-	(1, 1, 2.00, 18.00, 700.00, 1400.00, 0.00);
+	(1, 1, 2.00, 18.00, 700.00, 1400.00, 0.00),
+	(2, 1, 5.00, 18.00, 700.00, 3500.00, 0.00),
+	(3, 1, 7.00, 18.00, 700.00, 4900.00, 0.00),
+	(4, 1, 4.00, 18.00, 700.00, 2800.00, 0.00),
+	(4, 2, 1.00, 18.00, 2500.00, 2500.00, 0.00),
+	(4, 3, 2.00, 18.00, 5000.00, 10000.00, 0.00);
 /*!40000 ALTER TABLE `tblDetalleFactura` ENABLE KEYS */;
 
 -- Volcando estructura para tabla dbfacturas.tblDetallesCompras
@@ -151,13 +157,16 @@ CREATE TABLE IF NOT EXISTS `tblFactura` (
   PRIMARY KEY (`idfactura`),
   KEY `FK_tblventas_tblclientes` (`idcliente`),
   CONSTRAINT `FK_tblventas_tblclientes` FOREIGN KEY (`idcliente`) REFERENCES `tblcliente` (`idcliente`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
--- Volcando datos para la tabla dbfacturas.tblFactura: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla dbfacturas.tblFactura: ~4 rows (aproximadamente)
 DELETE FROM `tblFactura`;
 /*!40000 ALTER TABLE `tblFactura` DISABLE KEYS */;
 INSERT INTO `tblFactura` (`idfactura`, `idcliente`, `Fecha`, `Subtotal`, `Impuesto`, `Descuento`, `Total`, `Pago`, `MontoPagado`, `Anulada`) VALUES
-	(1, 1, '2019-12-21', 1400.00, 226.80, 140.00, 1486.80, 0, 0.00, 0);
+	(1, 1, '2019-12-21', 1400.00, 226.80, 140.00, 1486.80, 0, 0.00, 0),
+	(2, 1, '2019-12-21', 3500.00, 567.00, 350.00, 3717.00, 0, 3000.00, 0),
+	(3, 1, '2019-12-21', 4900.00, 793.80, 490.00, 5203.80, 0, 5203.80, 0),
+	(4, 2, '2019-12-21', 15300.00, 2478.60, 1530.00, 16248.60, 0, 10000.00, 0);
 /*!40000 ALTER TABLE `tblFactura` ENABLE KEYS */;
 
 -- Volcando estructura para tabla dbfacturas.tblpagos
@@ -189,13 +198,15 @@ CREATE TABLE IF NOT EXISTS `tblProducto` (
   `impuesto` decimal(4,2) NOT NULL DEFAULT '18.00',
   PRIMARY KEY (`idproducto`),
   UNIQUE KEY `Codigo` (`Codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
--- Volcando datos para la tabla dbfacturas.tblProducto: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla dbfacturas.tblProducto: ~3 rows (aproximadamente)
 DELETE FROM `tblProducto`;
 /*!40000 ALTER TABLE `tblProducto` DISABLE KEYS */;
 INSERT INTO `tblProducto` (`idproducto`, `Codigo`, `descripcion`, `Costo`, `precio`, `existencia`, `impuesto`) VALUES
-	(1, '1001', 'COMPUTADORA DELL', 500.00, 700.00, 3.00, 18.00);
+	(1, '1001', 'COMPUTADORA DELL', 500.00, 700.00, -13.00, 18.00),
+	(2, '1002', 'MONITOR LCD GX', 1500.00, 2500.00, 2.00, 18.00),
+	(3, '1003', 'CPU LENOVO ', 3000.00, 5000.00, 14.00, 18.00);
 /*!40000 ALTER TABLE `tblProducto` ENABLE KEYS */;
 
 -- Volcando estructura para tabla dbfacturas.tblproveedor
@@ -213,6 +224,24 @@ CREATE TABLE IF NOT EXISTS `tblproveedor` (
 DELETE FROM `tblproveedor`;
 /*!40000 ALTER TABLE `tblproveedor` DISABLE KEYS */;
 /*!40000 ALTER TABLE `tblproveedor` ENABLE KEYS */;
+
+-- Volcando estructura para tabla dbfacturas.tblregularizarInventario
+CREATE TABLE IF NOT EXISTS `tblregularizarInventario` (
+  `idmovimiento` int(11) NOT NULL AUTO_INCREMENT,
+  `idproducto` int(11) NOT NULL,
+  `fecha` date DEFAULT NULL,
+  `tipo` tinyint(4) NOT NULL,
+  `cantidad` double(8,2) unsigned NOT NULL,
+  `concepto` varchar(90) NOT NULL,
+  PRIMARY KEY (`idmovimiento`),
+  KEY `FK_tblmovimiento_tblProducto` (`idproducto`),
+  CONSTRAINT `FK_tblmovimiento_tblProducto` FOREIGN KEY (`idproducto`) REFERENCES `tblProducto` (`idproducto`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Volcando datos para la tabla dbfacturas.tblregularizarInventario: ~0 rows (aproximadamente)
+DELETE FROM `tblregularizarInventario`;
+/*!40000 ALTER TABLE `tblregularizarInventario` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblregularizarInventario` ENABLE KEYS */;
 
 -- Volcando estructura para tabla dbfacturas.tblusuario
 CREATE TABLE IF NOT EXISTS `tblusuario` (
@@ -239,6 +268,27 @@ IF NEW.Cantidad>0 THEN
   UPDATE tblproducto SET existencia=existencia-new.Cantidad WHERE idproducto=NEW.idproducto;
 END IF;
 
+
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Volcando estructura para disparador dbfacturas.tblregularizarInventario_after_insert
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `tblregularizarInventario_after_insert` AFTER INSERT ON `tblregularizarInventario` FOR EACH ROW BEGIN
+	DECLARE cant INT;
+	SET cant=0;
+	
+IF new.tipo=1 THEN
+		  SET cant= new.cantidad*-1;
+	 ELSE 
+		  SET cant= new.cantidad;
+	END IF;
+	
+IF NEW.Cantidad>0 THEN
+  UPDATE tblproducto SET existencia=existencia+cant WHERE idproducto=NEW.idproducto;
+END IF;
 
 END//
 DELIMITER ;
