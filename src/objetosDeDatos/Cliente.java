@@ -18,14 +18,16 @@ public class Cliente {
   String telefono;
   String cedula;
   double limiteDeCredito;
+  int idCliente;
 
-  public Cliente(String nombre, String apellido, String direccion, String telefono, String cedula, double limiteDeCredito) {
+  public Cliente(String nombre, String apellido, String direccion, String telefono, String cedula, double limiteDeCredito,int idCliente) {
     this.nombre = nombre;
     this.apellido = apellido;
     this.direccion = direccion;
     this.telefono = telefono;
     this.cedula = cedula;
     this.limiteDeCredito = limiteDeCredito;
+    this.idCliente=idCliente;
   }
   public Cliente(){
     
@@ -76,5 +78,63 @@ public class Cliente {
     
     return seHaModificado; 
   }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getCedula() {
+        return cedula;
+    }
+
+    public void setCedula(String cedula) {
+        this.cedula = cedula;
+    }
+
+    public double getLimiteDeCredito() {
+        return limiteDeCredito;
+    }
+
+    public void setLimiteDeCredito(double limiteDeCredito) {
+        this.limiteDeCredito = limiteDeCredito;
+    }
+
+    public int getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
+    }
+  
+  
   
 }
